@@ -1,0 +1,122 @@
+import os
+import time
+import shutil
+from PIL import Image
+import requests
+from StringIO import StringIO
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+#irctc open.....
+def login():
+    driver.get('https://www.irctc.co.in/eticketing/loginHome.jsf')
+    WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.NAME, 'j_username'))
+        ).send_keys(IRCTC_USERNAME)
+    driver.find_element_by_name('j_password').send_keys(IRCTC_PASSWORD)
+    driver.find_element_by_name('j_captcha').send_keys('')
+    time.sleep(15)
+    driver.find_element_by_name('submit').click()
+#opening new tabs......
+#driver.execute_script("window.open()")
+#driver.switch_to_window(driver.window_handles[1])
+
+#image downlaod.....
+#driver.get("https://www.irctc.co.in/eticketing/captchaImage")
+#driver.save_screenshot('screenshot.png')
+
+#upload....
+#driver.get("http://free-ocr.com")
+#element= driver.find_element_by_id("fileupfield")
+#element.send_keys('C:\Users\Rohan\Downloads'+'\screenshot.png')
+#submt= driver.find_element_by_id("fbut")
+#submt.submit()
+
+#result = driver.find_element_by_id("resultarea").get_attribute('value')
+#resul = result.replace(' ', '')
+
+
+#driver.execute_script("window.close()")
+
+#back to irctc......
+#print "switching to irctc"
+#driver.switch_to_window(driver.window_handles[0])
+#captcha = driver.find_element_by_name("j_captcha")
+#captcha.send_keys(result)
+
+
+#time.sleep(3)
+
+def planjourney():
+    WebDriverWait(driver, 60).until(
+        EC.presence_of_element_located((By.ID, 'jpform:fromStation'))
+        ).send_keys(FROM_STATION)
+    driver.find_element_by_id('jpform:toStation').send_keys(TO_STATION)
+    driver.find_element_by_id('jpform:journeyDateInputDate').send_keys(DATE)
+    driver.find_element_by_id('jpform:jpsubmit').click()
+    WebDriverWait(driver, 60).until(
+        EC.presence_of_all_elements_located((By.NAME, 'quota'))
+        )[0].click()
+    driver.find_element_by_id('cllink-%s-%s-%s' % (TRAIN_NO, CLASS, CLASS_INDEX)).click()
+    #WebDriverWait(driver, 60).until(
+       # EC.presence_of_element_located((By.ID, '#12304-3A-GN-0'))
+       # ).click()
+    #driver.find_element_by_id("12304-3A-GN-0").click()
+    time.sleep(10)
+
+def filldetails():
+    WebDriverWait(driver, 60).until(EC.title_contains('Book Ticket'))
+    for name, el in zip(NAMES, driver.find_elements_by_class_name('psgn-name')):
+        el.send_keys(name)
+    for age, el in zip(AGES, driver.find_elements_by_class_name('psgn-age')):
+        el.send_keys(age)
+    for gender, el in zip(GENDERS, driver.find_elements_by_class_name('psgn-gender')):
+        Select(el).select_by_value(gender)
+    for berth, el in zip(BERTHS, driver.find_elements_by_class_name('psgn-berth-choice')):
+        Select(el).select_by_value(berth)
+    driver.find_element_by_id('addPassengerForm:autoUpgrade').click()
+    driver.find_element_by_id('addPassengerForm:onlyConfirmBerths').click()
+    driver.find_element_by_id('nlpAnswer').send_keys('Agra')
+    driver.find_element_by_id('validate').click()
+
+def make_payment():
+    WebDriverWait(driver, 60).until(EC.title_contains('Book Ticket'))
+    driver.find_element_by_id('DEBIT_CARD').click()
+   # driver.find_element_by_value('9').click()
+   # driver.find_element_by_id('validate').click()
+   # driver.find_element_by_id('cnumber').send_keys('CARD_NUMBER')
+   # driver.find_element_by_id('expmon').send_keys('MONTH')
+   # driver.find_element_by_id('expyr').send_keys('YEAR')
+   # driver.find_element_by_id('cvv2').send_keys('CVV')
+   # driver.find_element_by_id('cname2').send_keys(AC_HOLDER_NAME)
+  #  driver.find_element_by_id('submitbtn').click()
+
+IRCTC_USERNAME = 'rohan_kr20'
+IRCTC_PASSWORD = 'password'
+FROM_STATION = 'PATNA JN - PNBE'
+FROM_STATION_CODE = 'PNBE'
+TO_STATION = 'HOWRAH JN - HWH'
+TO_STATION_CODE = 'HWH'
+DATE = '02-02-2017'
+TRAIN_NO = '12304'
+CLASS = '3A'
+CLASS_INDEX = '2'
+NAMES = ['rohan kumar', 'sohan kumar', 'mohan kumar']
+AGES = ['20', '24', '32']
+GENDERS = ['M', 'M', 'M']
+BERTHS = ['LB', 'LB', 'MB']
+CARD_NUMBER = '1234432112344321'
+MONTH = '10'
+YEAR = '2020'
+CVV = '127'
+AC_HOLDER_NAME = 'ROHAN KUMAR'
+
+if __name__ == '__main__':
+    driver = webdriver.Firefox()
+    login()
+    planjourney()
+    filldetails()
+    make_payment()
