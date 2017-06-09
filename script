@@ -21,34 +21,34 @@ def login():
     time.sleep(15)
     driver.find_element_by_name('submit').click()
 #opening new tabs......
-#driver.execute_script("window.open()")
-#driver.switch_to_window(driver.window_handles[1])
+driver.execute_script("window.open()")
+driver.switch_to_window(driver.window_handles[1])
 
 #image downlaod.....
-#driver.get("https://www.irctc.co.in/eticketing/captchaImage")
-#driver.save_screenshot('screenshot.png')
+driver.get("https://www.irctc.co.in/eticketing/captchaImage")
+driver.save_screenshot('screenshot.png')
 
 #upload....
-#driver.get("http://free-ocr.com")
-#element= driver.find_element_by_id("fileupfield")
-#element.send_keys('C:\Users\Rohan\Downloads'+'\screenshot.png')
-#submt= driver.find_element_by_id("fbut")
-#submt.submit()
+driver.get("http://free-ocr.com")
+element= driver.find_element_by_id("fileupfield")
+element.send_keys('C:\Users\Rohan\Downloads'+'\screenshot.png')
+submt= driver.find_element_by_id("fbut")
+submt.submit()
 
-#result = driver.find_element_by_id("resultarea").get_attribute('value')
-#resul = result.replace(' ', '')
+result = driver.find_element_by_id("resultarea").get_attribute('value')
+resul = result.replace(' ', '')
 
 
-#driver.execute_script("window.close()")
+driver.execute_script("window.close()")
 
 #back to irctc......
-#print "switching to irctc"
-#driver.switch_to_window(driver.window_handles[0])
-#captcha = driver.find_element_by_name("j_captcha")
-#captcha.send_keys(result)
+print "switching to irctc"
+driver.switch_to_window(driver.window_handles[0])
+captcha = driver.find_element_by_name("j_captcha")
+captcha.send_keys(result)
 
 
-#time.sleep(3)
+time.sleep(3)
 
 def planjourney():
     WebDriverWait(driver, 60).until(
